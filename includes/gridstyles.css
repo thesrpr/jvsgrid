@@ -1,0 +1,21 @@
+@font-face {font-family:"Century Gothic Bold";src:url("nu_century_gothic.eot?") format("eot"),url("nu_century_gothic.woff") format("woff"),url("nu_century_gothic.ttf") format("truetype"),url("nu_century_gothic.svg#nu-century-gothic-Bold") format("svg");font-weight:normal;font-style:normal;}
+
+
+#animated-grid {position: relative;}
+#animated-grid, #animated-grid li, #animated-grid li img {padding: 0; margin: 0; border: none; border-radius:0; box-shadow: none;}
+
+#animated-grid {width: 640px; list-style: none; }
+
+#animated-grid li {float: left; background: #e6f1f8;  height: 175px; }
+
+#animated-grid li img {opacity: .10; -webkit-filter: grayscale(100%); -moz-filter: grayscale(100%); -ms-filter: grayscale(100%); -o-filter: grayscale(100%); filter: grayscale(100%); z-index: 1; transition: all 2s ease-in-out;}
+
+#animated-grid li .quote {position: absolute; top:210px; left:66px; width:480px; opacity: 0; z-index: -1; transition: all 2s ease-in-out;}
+
+#animated-grid li .quote p {margin: 0; padding: 0; font-size: 18px; line-height: 21px; font-family:"Century Gothic Bold"; color: #006eb8;}
+
+#animated-grid li.active img {opacity: 1; -webkit-filter: grayscale(0); -moz-filter: grayscale(0); -ms-filter: grayscale(0); -o-filter: grayscale(0); filter: grayscale(0); transition: all 2s ease-in-out; }
+
+#animated-grid li.active .quote {opacity: 1; transition: all 2s ease-in-out; z-index: 2;}
+
+#animated-grid li:nth-child(n+5) .quote {top: 35px;}
