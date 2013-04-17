@@ -19,9 +19,9 @@ function plugin_deactivate() {
     flush_rewrite_rules();
 }
 // Plug In Updater
-include_once('includes/updater.php');
 
-if (is_admin()) { // note the use of is_admin() to double check that this is happening in the admin
+if (is_admin()) {
+	include_once('includes/updater.php'); // note the use of is_admin() to double check that this is happening in the admin
     $config = array(
         'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
         'proper_folder_name' => 'jvs-animated-grid', // this is the name of the folder your plugin lives in
@@ -34,7 +34,7 @@ if (is_admin()) { // note the use of is_admin() to double check that this is hap
         'tested' => '3.5.1', // which version of WordPress is your plugin tested up to?
         'readme' => 'README.md' // which file to use as the readme for the version number
     );
-    new WPGitHubUpdater($config);
+    new WP_GitHub_Updater($config);
 }
 
 // add scripts and styles

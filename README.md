@@ -3,4 +3,4 @@ jvsgrid
 
 Rotating Grid Image Plugin for JVS
 
-~Current Version:1.0~
+~Current Version:1.1~

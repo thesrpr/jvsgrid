@@ -422,3 +422,4 @@ class WP_GitHub_Updater {
 
 	}
 } 
+?>
