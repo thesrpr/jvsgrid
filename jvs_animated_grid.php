@@ -2,68 +2,14 @@
 /*
 Plugin Name: JVS Animated Grid Plugin
 Description: Creates animated grid on home page
-Version: 1.0
-License: GPL
+Version: 1.2
 Author: Corey Ellis
 Author URI: http://theseniorpartners.com
+License: GPLv2
 */
 
-// login rewrite
-register_activation_hook( __FILE__, 'plugin_activate' );
-function plugin_activate() {
-    flush_rewrite_rules();
-}
- 
-register_deactivation_hook( __FILE__, 'plugin_deactivate' );
-function plugin_deactivate() {
-    flush_rewrite_rules();
-}
-// Plug In Updater
-
-if (is_admin()) {
-	include_once('includes/updater.php'); // note the use of is_admin() to double check that this is happening in the admin
-    $config = array(
-        'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
-        'proper_folder_name' => 'jvs-animated-grid', // this is the name of the folder your plugin lives in
-        'api_url' => 'https://api.github.com/repos/thesrpr/jvsgrid', // the github API url of your github repo
-        'raw_url' => 'https://raw.github.com/thesrpr/jvsgrid/master', // the github raw url of your github repo
-        'github_url' => 'https://github.com/thesrpr/jvsgrid', // the github url of your github repo
-        'zip_url' => 'https://github.com/thesrpr/jvsgrid/zipball/master', // the zip url of the github repo
-        'sslverify' => true, // whether WP should check the validity of the SSL cert when getting an update, see https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/2 and https://github.com/jkudish/WordPress-GitHub-Plugin-Updater/issues/4 for details
-        'requires' => '3.0', // which version of WordPress does your plugin require?
-        'tested' => '3.5.1', // which version of WordPress is your plugin tested up to?
-        'readme' => 'README.md' // which file to use as the readme for the version number
-    );
-    new WP_GitHub_Updater($config);
-}
-
-// add scripts and styles
-function thesrpr_jvs_includes()
-  {
-    if (!is_admin()) {
-      
-  wp_enqueue_style( 'grid-styles', plugins_url('/' , __FILE__).'includes/gridstyles.css', '', '','all' );
-
-  if ( ! jQuery ) { wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'); }
-
-  wp_enqueue_script('jquery-timing', plugins_url('/' , __FILE__).'includes/jquery-timing.min.js', array( 'jquery' ), '', true);
-  wp_enqueue_script('grid', plugins_url('/' , __FILE__).'includes/grid.js', array( 'jquery', 'jquery-timing' ), '', true);
-
-  
-  }   
-}
-  
-add_action('init', 'thesrpr_jvs_includes');
-
-
-// add thumbnails
-add_theme_support( 'post-thumbnails', array( 'grid_post' ) );
-
-
-add_action( 'init', 'create_post_type' );
-function create_post_type() {
-
-//Animated Grid cpt
+function jvs_activate() {
+	//Animated Grid cpt
 $labels = array( 
         'name' => _x( 'grid posts', 'grid_post' ),
         'singular_name' => _x( 'grid post', 'grid_post' ),
@@ -100,17 +46,62 @@ $labels = array(
         );
 
     register_post_type( 'grid_post', $args );
+    add_theme_support( 'post-thumbnails', array( 'grid_post' ) );
+    
+	flush_rewrite_rules();
+}
 
+register_activation_hook( __FILE__, 'jvs_activate' );
+
+function jvs_deactivate() {
+	flush_rewrite_rules();
+}
+register_deactivation_hook( __FILE__, 'jvs_deactivate' );
+
+// Plug In Updater
+add_action( 'init', 'jvs_plugin_init' );
+function jvs_plugin_init() {
+
+	include_once 'includes/updater.php';
+
+	if ( is_admin() ) { // note the use of is_admin() to double check that this is happening in the admin
+
+		$config = array(
+        	'slug' => plugin_basename(__FILE__), // this is the slug of your plugin
+        	'proper_folder_name' => 'jvs-animated-grid', // this is the name of the folder your plugin lives in
+        	'api_url' => 'https://api.github.com/repos/thesrpr/jvsgrid', // the github API url of your github repo
+        	'raw_url' => 'https://raw.github.com/thesrpr/jvsgrid/master', // the github raw url of your github repo
+        	'github_url' => 'https://github.com/thesrpr/jvsgrid', // the github url of your github repo
+        	'zip_url' => 'https://github.com/thesrpr/jvsgrid/zipball/master', // the zip url of the github repo
+        	'sslverify' => true, 
+			'requires' => '3.0',
+			'tested' => '3.5',
+			'readme' => 'README.md'
+		);
+
+		new WP_GitHub_Updater( $config );
+
+	}
 
 }
-function rewrite_flush() 
-        {
- 
-            create_post_type();
 
-            flush_rewrite_rules();
-        }
-register_activation_hook( __FILE__, 'rewrite_flush' );
+// add scripts and styles
+function thesrpr_jvs_includes()
+  {
+    if (!is_admin()) {
+      
+  wp_enqueue_style( 'grid-styles', plugins_url('/' , __FILE__).'includes/gridstyles.css', '', '','all' );
+
+  if ( ! jQuery ) { wp_enqueue_script('jquery', 'https://ajax.googleapis.com/ajax/libs/jquery/1.9.0/jquery.min.js'); }
+
+  wp_enqueue_script('jquery-timing', plugins_url('/' , __FILE__).'includes/jquery-timing.min.js', array( 'jquery' ), '', true);
+  wp_enqueue_script('grid', plugins_url('/' , __FILE__).'includes/grid.js', array( 'jquery', 'jquery-timing' ), '', true);
+
+  
+  }   
+}
+  
+add_action('init', 'thesrpr_jvs_includes');
 
 function the_content_by_id($post_id) {
      $page_data = get_page($post_id);
@@ -119,8 +110,7 @@ function the_content_by_id($post_id) {
      return false;
 }
 
-add_shortcode( jvsgrid, thesrpr_jvs_grid );
-
+add_shortcode('jvsgrid', 'thesrpr_jvs_grid');
 
 function thesrpr_jvs_grid() {
     global $post;
