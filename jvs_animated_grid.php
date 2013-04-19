@@ -151,8 +151,3 @@ function thesrpr_jvs_grid() {
     return $output; 
 
 }
-
-
-
-
-?>
