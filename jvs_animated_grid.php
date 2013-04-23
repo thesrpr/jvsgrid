@@ -8,9 +8,10 @@ Author URI: http://theseniorpartners.com
 License: GPLv2
 */
 
-function jvs_activate() {
-	//Animated Grid cpt
-$labels = array( 
+add_action( 'init', 'jvs_grid_posts' );
+function jvs_grid_posts() {
+    //Animated Grid cpt
+    $labels = array( 
         'name' => _x( 'grid posts', 'grid_post' ),
         'singular_name' => _x( 'grid post', 'grid_post' ),
         'add_new' => _x( 'Add New', 'grid_post' ),
@@ -44,19 +45,22 @@ $labels = array(
         'rewrite' => true,
         'capability_type' => 'post'
         );
-
-    register_post_type( 'grid_post', $args );
-    add_theme_support( 'post-thumbnails', array( 'grid_post' ) );
     
-	flush_rewrite_rules();
+	 register_post_type( 'grid_post', $args );
+	 add_theme_support( 'post-thumbnails', array( 'grid_post' ) );
+
 }
 
-register_activation_hook( __FILE__, 'jvs_activate' );
+function thesrpr_rewrite_flush() {
+    jvs_grid_posts() ;
+    flush_rewrite_rules();
+}
+register_activation_hook( __FILE__, 'thesrpr_rewrite_flush' );
 
-function jvs_deactivate() {
+function jvs_grid_deactivate() {
 	flush_rewrite_rules();
 }
-register_deactivation_hook( __FILE__, 'jvs_deactivate' );
+register_deactivation_hook( __FILE__, 'jvs_grid_deactivate' );
 
 // Plug In Updater
 add_action( 'init', 'jvs_plugin_init' );
