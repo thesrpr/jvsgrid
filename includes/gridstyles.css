@@ -18,4 +18,4 @@
 
 #animated-grid li.active .quote {opacity: 1; transition: all 2s ease-in-out; z-index: 2;}
 
-#animated-grid li:nth-child(n+5) .quote {top: 35px;}
+#animated-grid li:nth-child(n+5) .quote {top: 75px;}

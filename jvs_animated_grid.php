@@ -2,7 +2,7 @@
 /*
 Plugin Name: JVS Animated Grid Plugin
 Description: Creates animated grid on home page
-Version: 1.2
+Version: 1.4
 Author: Corey Ellis
 Author URI: http://theseniorpartners.com
 License: GPLv2
